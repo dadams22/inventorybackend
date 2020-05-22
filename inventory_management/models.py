@@ -6,6 +6,9 @@ class Site(models.Model):
     name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class InventoryItem(models.Model):
     """ Represents an item in a customer's inventory """
@@ -13,8 +16,11 @@ class InventoryItem(models.Model):
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     associated_site = models.ForeignKey(Site, on_delete=models.CASCADE)
-    last_measurement = models.FloatField()
-    last_measurement_timestamp = models.DateTimeField()
+    last_measurement = models.FloatField(null=True)
+    last_measurement_timestamp = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Scale(models.Model):
