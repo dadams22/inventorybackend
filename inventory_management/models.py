@@ -15,7 +15,7 @@ class InventoryItem(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    associated_site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    associated_site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
     last_measurement = models.FloatField(null=True, blank=True)
     last_measurement_timestamp = models.DateTimeField(null=True, blank=True)
 
@@ -25,8 +25,11 @@ class InventoryItem(models.Model):
 
 class Scale(models.Model):
     """ Represents a scale that can be used for measurements """
-    associated_site = models.ForeignKey(Site, null=True, on_delete=models.SET_NULL)
-    associated_item = models.ForeignKey(InventoryItem, null=True, on_delete=models.SET_NULL)
+    site = models.ForeignKey(Site, related_name='scales', null=True, on_delete=models.SET_NULL)
+    item = models.ForeignKey(InventoryItem, related_name='scales', null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return 'Scale %d' % self.id
 
 
 class Measurement(models.Model):
