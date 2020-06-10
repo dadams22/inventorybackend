@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Site(models.Model):
@@ -8,6 +9,12 @@ class Site(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Profile(models.Model):
+    """ Represents a profile containing extra information about a user """
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
 
 class InventoryItem(models.Model):
