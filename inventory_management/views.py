@@ -8,6 +8,11 @@ class InventoryItemViewSet(viewsets.ModelViewSet):
     queryset = InventoryItem.objects.all()
     serializer_class = InventoryItemSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        site = user.profile.site
+        return self.queryset.filter(site=site)
+
 
 class ScaleViewSet(viewsets.ModelViewSet):
     queryset = Scale.objects.all()
