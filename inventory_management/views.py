@@ -17,3 +17,8 @@ class ScaleViewSet(viewsets.ModelViewSet):
 class SiteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        site = user.profile.site
+        return self.queryset.filter(pk=site.pk)
