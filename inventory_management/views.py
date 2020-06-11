@@ -13,6 +13,11 @@ class ScaleViewSet(viewsets.ModelViewSet):
     queryset = Scale.objects.all()
     serializer_class = ScaleSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        site = user.profile.site
+        return self.queryset.filter(site=site)
+
 
 class SiteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Site.objects.all()
