@@ -19,6 +19,7 @@ class Profile(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
 
+# TODO: make a signals.py file and move these to there
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
