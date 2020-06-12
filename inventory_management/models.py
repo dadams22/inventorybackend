@@ -35,7 +35,7 @@ class InventoryItem(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    associated_site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
     last_measurement = models.FloatField(null=True, blank=True)
     last_measurement_timestamp = models.DateTimeField(null=True, blank=True)
 
