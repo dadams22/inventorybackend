@@ -47,7 +47,7 @@ class InventoryItem(models.Model):
 class Scale(models.Model):
     """ Represents a scale that can be used for measurements """
     site = models.ForeignKey(Site, related_name='scales', null=True, on_delete=models.SET_NULL)
-    item = models.ForeignKey(InventoryItem, related_name='scales', null=True, on_delete=models.SET_NULL)
+    item = models.ForeignKey(InventoryItem, related_name='scales', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return 'Scale %d' % self.id

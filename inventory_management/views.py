@@ -13,6 +13,11 @@ class InventoryItemViewSet(viewsets.ModelViewSet):
         site = user.profile.site
         return self.queryset.filter(site=site)
 
+    def perform_create(self, serializer):
+        user = self.request.user
+        site = user.profile.site
+        serializer.save(site=site)
+
 
 class ScaleViewSet(viewsets.ModelViewSet):
     queryset = Scale.objects.all()
