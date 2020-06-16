@@ -4,6 +4,8 @@ from .models import Site, InventoryItem, Scale
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
+    scales = serializers.PrimaryKeyRelatedField(many=True, queryset=Scale.objects.all())
+
     class Meta:
         model = InventoryItem
         fields = ('id', 'name', 'description', 'scales', 'created_at', 'last_measurement', 'last_measurement_timestamp', 'site')
