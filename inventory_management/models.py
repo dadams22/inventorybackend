@@ -34,7 +34,7 @@ def save_user_profile(sender, instance, **kwargs):
 class InventoryItem(models.Model):
     """ Represents an item in a customer's inventory """
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
     last_measurement = models.FloatField(null=True, blank=True)
