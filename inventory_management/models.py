@@ -57,3 +57,4 @@ class Measurement(models.Model):
     """ Represents a single measurement made by a single scale """
     value = models.FloatField()
     scale = models.ForeignKey(Scale, on_delete=models.PROTECT)
+    timestamp = models.DateTimeField(auto_now_add=True)
