@@ -53,7 +53,7 @@ class Scale(models.Model):
         return 'Scale %d' % self.id
 
 
-class Measurement(models.Model):
+class ScaleReading(models.Model):
     """ Represents a single measurement made by a single scale """
     value = models.FloatField()
     scale = models.ForeignKey(Scale, on_delete=models.PROTECT)
