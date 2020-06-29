@@ -37,8 +37,6 @@ class InventoryItem(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
-    last_measurement = models.FloatField(null=True, blank=True)
-    last_measurement_timestamp = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
