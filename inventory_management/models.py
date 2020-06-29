@@ -58,3 +58,13 @@ class ScaleReading(models.Model):
     value = models.FloatField()
     scale = models.ForeignKey(Scale, on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class ItemMeasurement(models.Model):
+    """
+    Represents the measured value for the given item at the specified time.
+    This measurement may be the result of multiple different ScaleReadings.
+    """
+    item = models.ForeignKey(InventoryItem, related_name='measurements', on_delete=models.CASCADE)
+    value = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
