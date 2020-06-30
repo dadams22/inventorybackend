@@ -16,12 +16,13 @@ Including another URLconf
 from django.urls import path
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
-from .views import SiteViewSet, InventoryItemViewSet, ScaleViewSet
+from .views import SiteViewSet, InventoryItemViewSet, ScaleViewSet, ScaleReadingViewSet
 
 router = routers.SimpleRouter()
 router.register(r'sites', SiteViewSet)
 router.register(r'items', InventoryItemViewSet)
 router.register(r'scales', ScaleViewSet)
+router.register(r'readings', ScaleReadingViewSet)
 
 urlpatterns = [
     path('token-auth', obtain_jwt_token),
