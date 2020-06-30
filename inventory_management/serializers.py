@@ -1,6 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Site, InventoryItem, Scale
+from .models import Site, InventoryItem, Scale, ItemMeasurement
+
+
+class ItemMeasurementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemMeasurement
+        fields = ('value', 'timestamp')
+        read_only_fields = ('value', 'timestamp')
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
