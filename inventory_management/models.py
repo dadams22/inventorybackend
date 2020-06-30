@@ -41,6 +41,13 @@ class InventoryItem(models.Model):
     def __str__(self):
         return self.name
 
+    def get_last_measurement(self):
+        try:
+            result = ItemMeasurement.objects.filter(item=self.pk).latest('timestamp')
+        except ItemMeasurement.DoesNotExist:
+            result = None
+        return result
+
 
 class Scale(models.Model):
     """ Represents a scale that can be used for measurements """
