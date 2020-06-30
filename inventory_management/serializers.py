@@ -15,14 +15,10 @@ class InventoryItemSerializer(serializers.ModelSerializer):
             'scales',
             'created_at',
             'last_measurement',
-            'last_measurement_timestamp',
-            'site'
         )
         read_only_fields = (
             'created_at',
             'last_measurement',
-            'last_measurement_timestamp',
-            'site'
         )
 
 
