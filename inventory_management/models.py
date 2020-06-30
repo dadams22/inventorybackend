@@ -57,6 +57,9 @@ class ScaleReading(models.Model):
     scale = models.ForeignKey(Scale, on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return 'Reading: Scale %s at %s' % (self.scale.pk, str(self.timestamp))
+
 
 class ItemMeasurement(models.Model):
     """
