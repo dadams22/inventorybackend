@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Site, InventoryItem, Scale
-from .serializers import SiteSerializer, InventoryItemSerializer, ScaleSerializer
+from .models import Site, InventoryItem, Scale, ScaleReading
+from .serializers import SiteSerializer, InventoryItemSerializer, ScaleSerializer, ScaleReadingSerializer
 
 
 class InventoryItemViewSet(viewsets.ModelViewSet):
@@ -37,3 +37,13 @@ class SiteViewSet(viewsets.ReadOnlyModelViewSet):
         user = self.request.user
         site = user.profile.site
         return self.queryset.filter(pk=site.pk)
+
+
+class ScaleReadingViewSet(viewsets.ModelViewSet):
+    queryset = ScaleReading.objects.all()
+    serializer_class = ScaleReadingSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        site = user.profile.site
+        return self.queryset.filter(scale__site=site)

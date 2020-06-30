@@ -37,11 +37,16 @@ class InventoryItem(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
-    last_measurement = models.FloatField(null=True, blank=True)
-    last_measurement_timestamp = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def get_last_measurement(self):
+        try:
+            result = ItemMeasurement.objects.filter(item=self.pk).latest('timestamp')
+        except ItemMeasurement.DoesNotExist:
+            result = None
+        return result
 
 
 class Scale(models.Model):
@@ -53,7 +58,47 @@ class Scale(models.Model):
         return 'Scale %d' % self.id
 
 
-class Measurement(models.Model):
+class ScaleReading(models.Model):
     """ Represents a single measurement made by a single scale """
     value = models.FloatField()
     scale = models.ForeignKey(Scale, on_delete=models.PROTECT)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'Reading: Scale %s at %s' % (self.scale.pk, str(self.timestamp))
+
+
+class ItemMeasurement(models.Model):
+    """
+    Represents the measured value for the given item at the specified time.
+    This measurement may be the result of multiple different ScaleReadings.
+    """
+    item = models.ForeignKey(InventoryItem, related_name='measurements', on_delete=models.CASCADE)
+    value = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+# Create an ItemMeasurement object any time a ScaleReading is created
+@receiver(post_save, sender=ScaleReading)
+def create_item_measurement(sender, instance, created, **kwargs):
+    # Only create measurements for new readings
+    if not created:
+        return
+
+    scale = instance.scale
+    item = scale.item
+    linked_scales = Scale.objects.filter(item=item)
+
+    latest_readings = []
+    for scale in linked_scales:
+        try:
+            reading = ScaleReading.objects.filter(scale=scale, timestamp__gt=item.created_at).latest('timestamp')
+            latest_readings.append(reading)
+        except ScaleReading.DoesNotExist:
+            pass
+
+    if len(latest_readings) < len(linked_scales):
+        return
+
+    total_value = sum([ reading.value for reading in latest_readings ])
+    ItemMeasurement.objects.create(item=item, value=total_value)
