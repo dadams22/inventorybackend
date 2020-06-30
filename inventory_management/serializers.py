@@ -12,6 +12,7 @@ class ItemMeasurementSerializer(serializers.ModelSerializer):
 
 class InventoryItemSerializer(serializers.ModelSerializer):
     scales = serializers.PrimaryKeyRelatedField(many=True, queryset=Scale.objects.all())
+    last_measurement = ItemMeasurementSerializer(many=False, read_only=True, source='get_last_measurement')
 
     class Meta:
         model = InventoryItem
@@ -21,10 +22,12 @@ class InventoryItemSerializer(serializers.ModelSerializer):
             'description',
             'scales',
             'created_at',
+            'site',
             'last_measurement',
         )
         read_only_fields = (
             'created_at',
+            'site',
             'last_measurement',
         )
 
