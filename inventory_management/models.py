@@ -66,3 +66,29 @@ class ItemMeasurement(models.Model):
     item = models.ForeignKey(InventoryItem, related_name='measurements', on_delete=models.CASCADE)
     value = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+# Create an ItemMeasurement object any time a ScaleReading is created
+@receiver(post_save, sender=ScaleReading)
+def create_item_measurement(sender, instance, created, **kwargs):
+    # Only create measurements for new readings
+    if not created:
+        return
+
+    scale = instance.scale
+    item = scale.item
+    linked_scales = Scale.objects.filter(item=item)
+
+    latest_readings = []
+    for scale in linked_scales:
+        try:
+            reading = ScaleReading.objects.filter(scale=scale, timestamp__gt=item.created_at).latest('timestamp')
+            latest_readings.append(reading)
+        except ScaleReading.DoesNotExist:
+            pass
+
+    if len(latest_readings) < len(linked_scales):
+        return
+
+    total_value = sum([ reading.value for reading in latest_readings ])
+    ItemMeasurement.objects.create(item=item, value=total_value)
