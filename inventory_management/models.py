@@ -19,16 +19,16 @@ class Profile(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
 
-# TODO: make a signals.py file and move these to there
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# # TODO: make a signals.py file and move these to there
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#
+#
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
 
 
 class InventoryItem(models.Model):
