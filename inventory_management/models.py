@@ -100,5 +100,5 @@ def create_item_measurement(sender, instance, created, **kwargs):
     if len(latest_readings) < len(linked_scales):
         return
 
-    total_value = sum([ reading.value for reading in latest_readings ])
+    total_value = sum([reading.value for reading in latest_readings])
     ItemMeasurement.objects.create(item=item, value=total_value)
