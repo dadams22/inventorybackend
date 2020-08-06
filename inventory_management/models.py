@@ -47,7 +47,7 @@ class InventoryItem(models.Model):
         if not measurements:
             return None
 
-        return sum(measurements)
+        return sum([measurement.value for measurement in measurements])
 
     def __str__(self):
         return self.name
@@ -60,7 +60,7 @@ class ItemStocking(models.Model):
 
     def get_last_measurement(self):
         try:
-            result = ItemMeasurement.objects.filter(stocking=self.pk).latest('timestamp')
+            result = ItemMeasurement.objects.filter(stocking=self.pk).latest('timestamp').value
         except ItemMeasurement.DoesNotExist:
             result = None
         return result
