@@ -82,7 +82,7 @@ class ItemMeasurement(models.Model):
     Represents the measured value for the given item at the specified time.
     This measurement may be the result of multiple different ScaleReadings.
     """
-    item = models.ForeignKey(InventoryItem, related_name='measurements', on_delete=models.CASCADE)
+    stocking = models.ForeignKey(ItemStocking, related_name='measurements', on_delete=models.CASCADE)
     value = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
