@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Site, InventoryItem, Scale, ItemMeasurement, ScaleReading
+from .models import Site, InventoryItem, Scale, ItemMeasurement, ScaleReading, ItemStocking
 
 
 class ItemMeasurementSerializer(serializers.ModelSerializer):
@@ -8,6 +8,13 @@ class ItemMeasurementSerializer(serializers.ModelSerializer):
         model = ItemMeasurement
         fields = ('value', 'timestamp')
         read_only_fields = ('value', 'timestamp')
+
+
+class ItemStockingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemStocking
+        fields = ('id', 'created_at',)
+        read_only_fields = ('created_at',)
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
@@ -36,7 +43,7 @@ class ScaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Scale
         fields = '__all__'
-        read_only_fields = ('id', 'site')
+        read_only_fields = ('id', 'site',)
 
 
 class ScaleReadingSerializer(serializers.ModelSerializer):
@@ -53,4 +60,4 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         fields = ('id', 'name', 'created_at', 'items', 'scales')
-        read_only_fields = ('id', 'created_at')
+        read_only_fields = ('id', 'created_at',)
