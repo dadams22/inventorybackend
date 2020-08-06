@@ -49,10 +49,19 @@ class InventoryItem(models.Model):
         return result
 
 
+class ItemStocking(models.Model):
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return '%s stocking: %s' % (self.item.name, str(self.created_at))
+
+
 class Scale(models.Model):
     """ Represents a scale that can be used for measurements """
     site = models.ForeignKey(Site, related_name='scales', null=True, on_delete=models.SET_NULL)
-    item = models.ForeignKey(InventoryItem, related_name='scales', blank=True, null=True, on_delete=models.SET_NULL)
+    stocking = models.ForeignKey(ItemStocking, related_name='scales', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return 'Scale %d' % self.id
@@ -66,15 +75,6 @@ class ScaleReading(models.Model):
 
     def __str__(self):
         return 'Reading: Scale %s at %s' % (self.scale.pk, str(self.timestamp))
-
-
-class ItemStocking(models.Model):
-    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return '%s stocking: %s' % (self.item.name, str(self.created_at))
 
 
 class ItemMeasurement(models.Model):
