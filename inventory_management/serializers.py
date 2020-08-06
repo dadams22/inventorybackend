@@ -18,6 +18,7 @@ class ItemStockingSerializer(serializers.ModelSerializer):
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
+    stockings = ItemStockingSerializer(many=True, source='get_active_stockings')
     scales = serializers.PrimaryKeyRelatedField(many=True, queryset=Scale.objects.all())
     last_measurement = ItemMeasurementSerializer(many=False, read_only=True, source='get_last_measurement')
 
@@ -27,12 +28,15 @@ class InventoryItemSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description',
+            'stockings',
             'scales',
             'created_at',
             'site',
             'last_measurement',
         )
         read_only_fields = (
+            'stockings',
+            'scales',
             'created_at',
             'site',
             'last_measurement',
