@@ -38,12 +38,23 @@ class InventoryItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     site = models.ForeignKey(Site, related_name='items', on_delete=models.CASCADE)
 
+    def get_last_measurement(self):
+        measurements = filter(
+            lambda measurement: measurement is not None,
+            [stocking.get_last_measurement() for stocking in self.stockings]
+        )
+
+        if not measurements:
+            return None
+
+        return sum(measurements)
+
     def __str__(self):
         return self.name
 
 
 class ItemStocking(models.Model):
-    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
+    item = models.ForeignKey(InventoryItem, related_name='stockings', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
