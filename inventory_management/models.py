@@ -40,7 +40,7 @@ class InventoryItem(models.Model):
 
     def get_last_measurement(self):
         measurements = filter(
-            lambda measurement: measurement is not None,
+            lambda stocking: stocking.active and stocking.get_last_measurement() is not None,
             [stocking.get_last_measurement() for stocking in self.stockings]
         )
 
