@@ -49,6 +49,9 @@ class InventoryItem(models.Model):
 
         return sum([measurement.value for measurement in measurements])
 
+    def get_active_stockings(self):
+        return ItemStocking.objects.filter(item=self.pk, active=True)
+
     def __str__(self):
         return self.name
 
