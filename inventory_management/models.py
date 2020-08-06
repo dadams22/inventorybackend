@@ -41,18 +41,18 @@ class InventoryItem(models.Model):
     def __str__(self):
         return self.name
 
-    def get_last_measurement(self):
-        try:
-            result = ItemMeasurement.objects.filter(item=self.pk).latest('timestamp')
-        except ItemMeasurement.DoesNotExist:
-            result = None
-        return result
-
 
 class ItemStocking(models.Model):
     item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
+
+    def get_last_measurement(self):
+        try:
+            result = ItemMeasurement.objects.filter(stocking=self.pk).latest('timestamp')
+        except ItemMeasurement.DoesNotExist:
+            result = None
+        return result
 
     def __str__(self):
         return '%s stocking: %s' % (self.item.name, str(self.created_at))
