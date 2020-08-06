@@ -68,6 +68,15 @@ class ScaleReading(models.Model):
         return 'Reading: Scale %s at %s' % (self.scale.pk, str(self.timestamp))
 
 
+class ItemStocking(models.Model):
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return '%s stocking: %s' % (self.item.name, str(self.created_at))
+
+
 class ItemMeasurement(models.Model):
     """
     Represents the measured value for the given item at the specified time.
