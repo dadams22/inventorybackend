@@ -11,11 +11,12 @@ class ItemMeasurementSerializer(serializers.ModelSerializer):
 
 
 class ItemStockingSerializer(serializers.ModelSerializer):
+    scales = serializers.PrimaryKeyRelatedField(many=True, queryset=Scale.objects.all())
     last_measurement = serializers.FloatField(source='get_last_measurement')
 
     class Meta:
         model = ItemStocking
-        fields = ('id', 'created_at', 'last_measurement')
+        fields = ('id', 'created_at', 'scales', 'last_measurement')
         read_only_fields = ('created_at', 'last_measurement')
 
 
