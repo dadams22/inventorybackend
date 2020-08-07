@@ -109,13 +109,13 @@ def create_item_measurement(sender, instance, created, **kwargs):
         return
 
     scale = instance.scale
-    item = scale.item
-    linked_scales = Scale.objects.filter(item=item)
+    stocking = scale.stocking
+    linked_scales = Scale.objects.filter(stocking=stocking)
 
     latest_readings = []
     for scale in linked_scales:
         try:
-            reading = ScaleReading.objects.filter(scale=scale, timestamp__gt=item.created_at).latest('timestamp')
+            reading = ScaleReading.objects.filter(scale=scale, timestamp__gt=stocking.created_at).latest('timestamp')
             latest_readings.append(reading)
         except ScaleReading.DoesNotExist:
             pass
@@ -124,4 +124,4 @@ def create_item_measurement(sender, instance, created, **kwargs):
         return
 
     total_value = sum([reading.value for reading in latest_readings])
-    ItemMeasurement.objects.create(item=item, value=total_value)
+    ItemMeasurement.objects.create(stocking=stocking, value=total_value)
