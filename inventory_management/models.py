@@ -40,14 +40,14 @@ class InventoryItem(models.Model):
 
     def get_last_measurement(self):
         measurements = filter(
-            lambda stocking: stocking.active and stocking.get_last_measurement() is not None,
-            [stocking.get_last_measurement() for stocking in self.stockings]
+            lambda measurement: measurement is not None,
+            [stocking.get_last_measurement() for stocking in self.stockings.filter(active=True)]
         )
 
         if not measurements:
             return None
 
-        return sum([measurement.value for measurement in measurements])
+        return sum(measurements)
 
     def get_active_stockings(self):
         return ItemStocking.objects.filter(item=self.pk, active=True)
