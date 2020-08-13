@@ -21,8 +21,8 @@ class ItemStockingSerializer(serializers.ModelSerializer):
 
 
 class InventoryItemSerializer(serializers.ModelSerializer):
-    stockings = ItemStockingSerializer(many=True, source='get_active_stockings')
-    last_measurement = serializers.FloatField(source='get_last_measurement')
+    stockings = ItemStockingSerializer(many=True, source='get_active_stockings', read_only=True)
+    last_measurement = serializers.FloatField(source='get_last_measurement', read_only=True)
 
     class Meta:
         model = InventoryItem
@@ -36,6 +36,7 @@ class InventoryItemSerializer(serializers.ModelSerializer):
             'last_measurement',
         )
         read_only_fields = (
+            'id',
             'stockings',
             'created_at',
             'site',
